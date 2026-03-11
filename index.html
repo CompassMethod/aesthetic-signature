@@ -566,7 +566,7 @@
   <div id="form-view">
     <div class="page-title">
       <h1>Identify Your<br>Aesthetic Signature</h1>
-      <p>Upload up to six photos from your current visual output — press shots, live photos, social posts, music videos. Add some context and we will help you identify what is already there. Note: screenshots and screen recordings will not work. Use actual photo files only.</p>
+      <p>Upload up to six photos from your current visual output — press shots, live photos, social posts, music videos, or screenshots. Add some context and we will help you identify what is already there.</p>
     </div>
 
     <!-- Artist Info -->
@@ -677,6 +677,7 @@
         showError('Unsupported file type: ' + file.type + '. Please use JPG, PNG, WEBP, or GIF.');
         return;
       }
+
       const reader = new FileReader();
       reader.onload = e => {
         uploadedPhotos.push({ file, dataUrl: e.target.result });
