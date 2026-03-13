@@ -694,9 +694,9 @@
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, w, h);
 
-          // Always output as JPEG for best compression (except PNGs with transparency — keep as PNG)
-          const outputType = (file.type === 'image/png') ? 'image/png' : 'image/jpeg';
-          const outputQuality = (outputType === 'image/png') ? undefined : quality;
+          // Always convert to JPEG for best compression
+          const outputType = 'image/jpeg';
+          const outputQuality = quality;
           resolve(canvas.toDataURL(outputType, outputQuality));
         };
         img.src = e.target.result;
