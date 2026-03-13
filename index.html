@@ -566,7 +566,7 @@
   <div id="form-view">
     <div class="page-title">
       <h1>Identify Your<br>Aesthetic Signature</h1>
-      <p>Upload up to six photos currently in use for your project — press shots, live photos, social posts, or screenshots. Add some context and we will help you articulate your aesthetic ID.</p>
+      <p>Upload up to six photos currently in use for your project — press shots, live photos, social posts, or screenshots. We will help you articulate your aesthetic ID.</p>
     </div>
 
     <!-- Artist Info -->
@@ -579,11 +579,6 @@
         <label>Genre / Sound</label>
         <input type="text" id="artist-genre" placeholder="e.g. Alt-pop, indie folk, R&B">
       </div>
-    </div>
-
-    <div class="form-section">
-      <label>Brief Bio or Context</label>
-      <textarea id="artist-bio" placeholder="Tell us a bit about where you are in your project, what you're working on, and any visual references or artists you're drawn to. The more specific, the better."></textarea>
     </div>
 
     <hr class="divider">
@@ -764,7 +759,6 @@
   async function runAnalysis() {
     const name = document.getElementById('artist-name').value.trim();
     const genre = document.getElementById('artist-genre').value.trim();
-    const bio = document.getElementById('artist-bio').value.trim();
     const errorEl = document.getElementById('error-msg');
     errorEl.classList.remove('active');
 
@@ -789,7 +783,7 @@
       }
     }));
 
-    const textPrompt = 'You are an expert visual analyst trained in the Aesthetic Signature framework developed by Compass Method Consulting. Your role is to analyze an artist\'s photos and identify their Aesthetic Signature with precision and depth.\n\nARTIST CONTEXT:\nName: ' + name + '\nGenre/Sound: ' + (genre || 'Not specified') + '\nBio/Context: ' + (bio || 'Not provided') + '\n\nTHE AESTHETIC SIGNATURE FRAMEWORK:\nAn Aesthetic Signature is the consistent visual and stylistic language that makes an artist immediately recognizable. It is NOT a mood board or aspiration — it is a precise description of what is ACTUALLY PRESENT in the visual work. It typically has multiple layers (cultural references, eras, subcultures, visual traditions) that cohere through an internal logic or throughline.\n\nKEY DISTINCTION: The Aesthetic Signature is descriptive (what is there). Framing is constructive (the concept you build from it). Analyze the signature first, then propose the framing.\n\nAnalyze the provided photos and produce the following structured report. Use ## headers exactly as shown:\n\n## THE LAYERS\n\nName 2-4 distinct visual/cultural layers you can identify in these photos. For each layer, be specific: not just "vintage" but what era, what subculture, what specific visual tradition. Name the references precisely — fashion movements, film aesthetics, music subcultures, geographic aesthetics, specific decades.\n\n## THE THROUGHLINE\n\nWhat is the unifying logic that makes these layers cohere? This is the single thread that runs through all of them — the emotional quality, the shared cultural root, or the defining tension that makes this feel like ONE signature rather than a collection of borrowed looks.\n\n## WHAT IT SIGNALS ABOUT THE AUDIENCE\n\nBased purely on the visual world present in these photos — the eras evoked, the subcultures referenced, the emotional tone — describe who this visual language speaks to. Be specific about age range, cultural touchstones, what they value, what they are drawn to.\n\n## SUGGESTED FRAMING\n\nPropose 1-3 framing options for this artist. Each should be 2-5 words. Each should create familiarity AND curiosity simultaneously. The best framing maps directly onto the Aesthetic Signature. Briefly explain the logic of each option.\n\nWrite in a direct, intelligent, editorial voice. Be specific. Name real references. Do not hedge.';
+    const textPrompt = 'You are an expert visual analyst trained in the Aesthetic Signature framework developed by Compass Method Consulting. Your role is to analyze an artist\'s photos and identify their Aesthetic Signature with precision and depth.\n\nARTIST CONTEXT:\nName: ' + name + '\nGenre/Sound: ' + (genre || 'Not specified') + '\n\nTHE AESTHETIC SIGNATURE FRAMEWORK:\nAn Aesthetic Signature is the consistent visual and stylistic language that makes an artist immediately recognizable. It is NOT a mood board or aspiration — it is a precise description of what is ACTUALLY PRESENT in the visual work. It typically has multiple layers (cultural references, eras, subcultures, visual traditions) that cohere through an internal logic or throughline.\n\nKEY DISTINCTION: The Aesthetic Signature is descriptive (what is there). Framing is constructive (the concept you build from it). Analyze the signature first, then propose the framing.\n\nAnalyze the provided photos and produce the following structured report. Use ## headers exactly as shown:\n\n## THE LAYERS\n\nName 2-4 distinct visual/cultural layers you can identify in these photos. For each layer, be specific: not just "vintage" but what era, what subculture, what specific visual tradition. Name the references precisely — fashion movements, film aesthetics, music subcultures, geographic aesthetics, specific decades.\n\n## THE THROUGHLINE\n\nWhat is the unifying logic that makes these layers cohere? This is the single thread that runs through all of them — the emotional quality, the shared cultural root, or the defining tension that makes this feel like ONE signature rather than a collection of borrowed looks.\n\n## WHAT IT SIGNALS ABOUT THE AUDIENCE\n\nBased purely on the visual world present in these photos — the eras evoked, the subcultures referenced, the emotional tone — describe who this visual language speaks to. Be specific about age range, cultural touchstones, what they value, what they are drawn to.\n\n## SUGGESTED FRAMING\n\nPropose 1-3 framing options for this artist. Each should be 2-5 words. Each should create familiarity AND curiosity simultaneously. The best framing maps directly onto the Aesthetic Signature. Briefly explain the logic of each option.\n\nWrite in a direct, intelligent, editorial voice. Be specific. Name real references. Do not hedge.';
 
     const messages = [{
       role: 'user',
@@ -928,7 +922,6 @@
     lastResultText = '';
     document.getElementById('artist-name').value = '';
     document.getElementById('artist-genre').value = '';
-    document.getElementById('artist-bio').value = '';
     document.getElementById('photo-grid').innerHTML = '';
     document.getElementById('photo-count').textContent = '';
     document.getElementById('results').classList.remove('active');
