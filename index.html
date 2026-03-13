@@ -715,7 +715,7 @@
         return;
       }
 
-      compressImage(file, 1600, 0.82)
+      compressImage(file, 800, 0.60)
         .then(function(dataUrl) {
           uploadedPhotos.push({ file: file, dataUrl: dataUrl });
           renderPreviews();
