@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aesthetic Signature Analyzer — Ekō System</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Karla:wght@300;400;500&display=swap" rel="stylesheet">
@@ -991,13 +992,111 @@
   function downloadResults() {
     if (!lastResultText) return;
     const artistName = document.getElementById('results-name').textContent;
-    const fullText = 'AESTHETIC SIGNATURE ANALYSIS\n' + artistName + '\nEkō System — Compass Method Consulting\n\n' + lastResultText;
-    const blob = new Blob([fullText], { type: 'text/plain' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    
+    // Create a new jsPDF instance
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+    
+    const pageWidth = 210;
+    const pageHeight = 297;
+    const margin = 25;
+    const contentWidth = pageWidth - (margin * 2);
+    let yPosition = margin;
+    
+    // Colors matching the design
+    const darkBg = [14, 15, 13];
+    const accent = [200, 184, 154];
+    const textColor = [232, 230, 224];
+    const mutedText = [138, 138, 130];
+    
+    // Background
+    doc.setFillColor(...darkBg);
+    doc.rect(0, 0, pageWidth, pageHeight, 'F');
+    
+    // Header - Ekō System branding
+    doc.setFontSize(8);
+    doc.setTextColor(...accent);
+    doc.setFont('helvetica', 'normal');
+    doc.text('EKŌ SYSTEM', margin, yPosition);
+    yPosition += 4;
+    
+    doc.setFontSize(12);
+    doc.setTextColor(...textColor);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Aesthetic Signature Analysis', margin, yPosition);
+    yPosition += 12;
+    
+    // Artist name
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(artistName, margin, yPosition);
+    yPosition += 10;
+    
+    // Divider line
+    doc.setDrawColor(...accent);
+    doc.setLineWidth(0.3);
+    doc.line(margin, yPosition, pageWidth - margin, yPosition);
+    yPosition += 8;
+    
+    // Parse and format the content
+    const sections = parseMarkdown(lastResultText);
+    
+    sections.forEach((section, index) => {
+      // Check if we need a new page
+      if (yPosition > pageHeight - 40) {
+        doc.addPage();
+        yPosition = margin;
+      }
+      
+      // Section header
+      doc.setFontSize(10);
+      doc.setTextColor(...accent);
+      doc.setFont('helvetica', 'bold');
+      const headerLines = doc.splitTextToSize(section.title.toUpperCase(), contentWidth);
+      doc.text(headerLines, margin, yPosition);
+      yPosition += headerLines.length * 5 + 3;
+      
+      // Section body - convert HTML to plain text
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = section.html;
+      const bodyText = tempDiv.textContent || tempDiv.innerText;
+      
+      doc.setFontSize(9);
+      doc.setTextColor(...textColor);
+      doc.setFont('helvetica', 'normal');
+      
+      const lines = doc.splitTextToSize(bodyText, contentWidth);
+      lines.forEach(line => {
+        if (yPosition > pageHeight - 25) {
+          doc.addPage();
+          yPosition = margin;
+        }
+        doc.text(line, margin, yPosition);
+        yPosition += 5;
+      });
+      
+      yPosition += 5; // Space between sections
+    });
+    
+    // Footer on last page
+    const totalPages = doc.internal.getNumberOfPages();
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      doc.setFontSize(7);
+      doc.setTextColor(...mutedText);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Ekō System — Compass Method Consulting', margin, pageHeight - 15);
+      doc.text('Brooklyn · Los Angeles · Toronto', margin, pageHeight - 10);
+      doc.text('Page ' + i + ' of ' + totalPages, pageWidth - margin - 20, pageHeight - 10);
+    }
+    
+    // Save the PDF
     const safeName = artistName.split(' ').join('_');
-    a.download = safeName + '_Aesthetic_Signature.txt';
-    a.click();
+    doc.save(safeName + '_Aesthetic_Signature.pdf');
   }
 
   // ── Helpers ──
